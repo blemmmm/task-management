@@ -1,0 +1,31 @@
+{
+  log {
+    format console
+  }
+}
+
+example.com {
+  header {
+    Strict-Transport-Security "max-age=63072000"
+    defer
+  }
+  handle {
+    reverse_proxy client:3000
+  }
+  tls {
+    protocols tls1.3
+  }
+}
+
+api.example.com {
+  header {
+    Strict-Transport-Security "max-age=63072000"
+    defer
+  }
+  handle {
+    reverse_proxy server:8080
+  }
+  tls {
+    protocols tls1.3
+  }
+}

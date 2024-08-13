@@ -1,0 +1,24 @@
+# env
+
+/*.env
+/**/*.env
+
+# caddy
+
+/caddy/config/
+/caddy/data/
+/caddy/logs/
+
+# client
+
+/client/node_modules/
+/client/dist/
+
+# postgres
+
+/postgres/data/
+
+# server
+
+/server/node_modules/
+/server/dist/

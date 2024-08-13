@@ -1,0 +1,73 @@
+services:
+  client:
+    build:
+      context: ./ # path of root directory; don't change.
+      dockerfile: ./client/Dockerfile # path relative to root directory.
+    restart: "no"
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - example-network
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./ # path of root directory; don't change.
+      dockerfile: ./server/Dockerfile # path relative to root directory.
+    restart: "no"
+    ports:
+      - 127.0.0.1:8080:8080
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST:?error}
+      POSTGRES_DB: ${POSTGRES_DB:?error}
+      POSTGRES_USER: ${POSTGRES_USER:?error}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?error}
+    networks:
+      - example-network
+    depends_on:
+      - postgres
+
+  # https://hub.docker.com/_/postgres/
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgres/entrypoint:/docker-entrypoint-initdb.d
+      - ./postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --username=postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    networks:
+      - example-network
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    volumes:
+      - ./caddy/config:/config
+      - ./caddy/data:/data
+      - ./caddy/logs:/var/log/caddy/
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - example-network
+    depends_on:
+      - server
+
+networks:
+  example-network:
+    name: example-network
