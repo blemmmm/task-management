@@ -23,7 +23,7 @@ fastify.get("/api/tasks", async () => {
   return tasks;
 });
 
-fastify.post("/api/tasks", async (request, reply) => {
+fastify.post("/api/tasks", async (request) => {
   const task = await pgdb
     .insertInto("tasks")
     .values(request.body as Task)
