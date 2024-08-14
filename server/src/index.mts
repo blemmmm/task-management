@@ -18,14 +18,35 @@ fastify.get("/", () => {
   return { hello: "world" };
 });
 
-fastify.get("/api/tasks", async () => {
-  const tasks = await pgdb
-    .selectFrom("tasks")
-    .selectAll()
-    .orderBy("created_at", "desc")
-    .execute();
-  return tasks;
-});
+fastify.get<{ Querystring: { sort: string; filter: string; name: string } }>(
+  "/api/tasks",
+  {
+    schema: {
+      querystring: {
+        sort: { type: "string" },
+        filter: { type: "string" },
+        name: { type: "string" },
+      },
+    },
+  },
+  async (request) => {
+    const { filter, name } = request.query;
+
+    let query = pgdb.selectFrom("tasks").selectAll();
+
+    if (filter) {
+      query = query.where("status", "=", filter);
+    }
+
+    if (name) {
+      query = query.where("name", "like", `%${name}%`);
+    }
+
+    const tasks = await query.orderBy("created_at", "desc").execute();
+
+    return tasks;
+  },
+);
 
 fastify.post("/api/tasks", async (request) => {
   const task = await pgdb

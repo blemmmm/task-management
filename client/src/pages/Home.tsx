@@ -1,7 +1,7 @@
 import TaskCard from '@/components/TaskCard';
 import { Task, TaskPayload } from '@/lib/interface/TaskTypes';
 import { useTaskService } from '@/lib/services/taskService';
-import { Add, ThumbUp } from '@mui/icons-material';
+import { Add, Search, ThumbUp } from '@mui/icons-material';
 import {
   Button,
   Card,
@@ -10,11 +10,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  InputAdornment,
   MenuItem,
+  Select,
   TextField,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
 type StatusTypes = 'pending' | 'in_progress' | 'completed';
@@ -23,6 +25,10 @@ const HomePage = () => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [searchParams, setSearchParams] = useState<{
+    name?: string;
+    filter?: string;
+  }>({});
   const [task, setTask] = useState<TaskPayload>({
     name: '',
     description: '',
@@ -31,7 +37,7 @@ const HomePage = () => {
   });
 
   const { getTasks, createTask, updateTask, deleteTask } = useTaskService();
-  const { data: tasksData } = getTasks();
+  const { data: tasksData, refetch } = getTasks(searchParams);
   const { mutateAsync: createTaskMutation } = useMutation(createTask);
   const { mutateAsync: updateTaskMutation } = useMutation(updateTask);
   const { mutateAsync: deleteTaskMutation } = useMutation(deleteTask);
@@ -80,11 +86,18 @@ const HomePage = () => {
     setIsEditing(false);
   };
 
+  useEffect(() => {
+    if (searchParams) {
+      refetch();
+    }
+  }, [searchParams]);
+
   return (
     <div className="flex items-center justify-center w-full">
-      <div className="border border-solid border-neutral-200 h-auto rounded-lg my-4 w-full lg:w-[40vw]">
-        <div className="py-3 flex items-center justify-between border-0 border-b border-solid border-neutral-200 font-sans px-4 lg:px-8">
+      <div className="border border-solid border-neutral-200 h-auto rounded-lg my-4 w-full xl:w-[40vw]">
+        <div className="py-3 flex items-center justify-between border-0 border-b border-solid border-neutral-200 font-sans px-4 xl:px-8">
           <span className="text-lg font-semibold">Tasks</span>
+
           <Button
             className="!bg-neutral-100 !px-4 !py-2 !gap-1.5"
             onClick={() => {
@@ -97,6 +110,47 @@ const HomePage = () => {
           </Button>
         </div>
         <div className="p-4 space-y-4 overflow-y-auto">
+          <div className="flex items-center justify-between gap-2">
+            <TextField
+              type="search"
+              variant="standard"
+              placeholder="Search tasks"
+              fullWidth
+              sx={{ marginBottom: '1rem' }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(e) => {
+                setSearchParams((prev) => ({ ...prev, name: e.target.value }));
+              }}
+            />
+
+            <Select
+              size="small"
+              value={searchParams.filter ?? 'all'}
+              placeholder="Filter Tasks"
+              onChange={(e) => {
+                if (e.target.value === 'all') {
+                  setSearchParams((prev) => ({ ...prev, filter: undefined }));
+                } else {
+                  setSearchParams((prev) => ({
+                    ...prev,
+                    filter: e.target.value,
+                  }));
+                }
+              }}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="pending">Pending</MenuItem>
+              <MenuItem value="in_progress">In Progress</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          </div>
+
           {tasksData && tasksData.length > 0 ? (
             tasksData.map((task) => (
               <TaskCard

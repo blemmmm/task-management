@@ -5,15 +5,23 @@ import { config } from '../config';
 import { TaskPayload, TaskResponse } from '../interface/TaskTypes';
 
 export const useTaskService = () => {
-  const fetchTasks = async () => {
-    const response = await fetch(`${config.apiUrl}/api/tasks`);
+  const fetchTasks = async (params = {}) => {
+    const endpoint = new URL(`${config.apiUrl}/api/tasks`);
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          endpoint.searchParams.set(key, value?.toString());
+        }
+      });
+    }
+    const response = await fetch(endpoint);
     const data = await response.json();
 
     return data;
   };
 
-  const getTasks = () => {
-    return useQuery<TaskResponse, Error>(['tasks'], () => fetchTasks(), {
+  const getTasks = (params = {}) => {
+    return useQuery<TaskResponse, Error>(['tasks'], () => fetchTasks(params), {
       staleTime: Infinity,
       cacheTime: Infinity,
     });
