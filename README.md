@@ -24,7 +24,7 @@
 
 > First Terminal
 
-first, run this command -> bash ./dev.env.sh
+first, run this command -> bash ./dev.env.sh &nbsp;
 then run this command -> bash ./dev.containers.sh
 
 > Second Terminal
