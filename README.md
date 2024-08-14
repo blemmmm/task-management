@@ -17,6 +17,7 @@
 - [Node.js](https://nodejs.org/en/)
 - [Fastify](https://www.fastify.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Material UI](https://mui.com/)
 
