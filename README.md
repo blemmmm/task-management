@@ -24,14 +24,14 @@
 
 > First Terminal
 
-```bash ./dev.env.sh
-  bash ./dev.containers.sh
+```run this command -> bash ./dev.env.sh
+  then run this command -> bash ./dev.containers.sh
 
 ```
 
 > Second Terminal
 
-```cd client
+```change directory to client
     create .env file
     add VITE_API_URL=http://localhost:8080 on .env file
     npm install or yarn
@@ -40,7 +40,7 @@
 
 > Third Terminal
 
-```cd server
+```change directory to server
     npm install or yarn
     npm run dev or yarn dev
 ```
