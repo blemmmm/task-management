@@ -2,12 +2,12 @@
 
 ## Features
 
-[x] Add a new task
-[x] Edit a task (name, description, status)
-[x] Delete a task
-[x] View all tasks
-[x] Search task by name
-[x] Search task by status
+- [x] Add a new task
+- [x] Edit a task (name, description, status)
+- [x] Delete a task
+- [x] View all tasks
+- [x] Search task by name
+- [x] Search task by status
 
 ## Tech Stack
 
