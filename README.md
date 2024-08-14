@@ -24,7 +24,7 @@
 
 > First Terminal
 
-```run this command -> bash ./dev.env.sh
+```first, run this command -> bash ./dev.env.sh
   then run this command -> bash ./dev.containers.sh
 
 ```
