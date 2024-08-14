@@ -1,15 +1,18 @@
 import TaskCard from '@/components/TaskCard';
 import { Task, TaskPayload } from '@/lib/interface/TaskTypes';
 import { useTaskService } from '@/lib/services/taskService';
-import { Add } from '@mui/icons-material';
+import { Add, ThumbUp } from '@mui/icons-material';
 import {
   Button,
+  Card,
+  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   MenuItem,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -94,16 +97,37 @@ const HomePage = () => {
           </Button>
         </div>
         <div className="p-4 space-y-4 overflow-y-auto">
-          {tasksData && tasksData.length > 0
-            ? tasksData.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  handleEditValues={handleEditValues}
-                  handleDeleteTask={handleDeleteTask}
-                />
-              ))
-            : 'No Data'}
+          {tasksData && tasksData.length > 0 ? (
+            tasksData.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                handleEditValues={handleEditValues}
+                handleDeleteTask={handleDeleteTask}
+              />
+            ))
+          ) : (
+            <Card variant="outlined" className="!border-none !bg-neutral-50">
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  className="flex items-center justify-center gap-2"
+                  sx={{ fontSize: '1rem' }}
+                >
+                  <ThumbUp color="info" />
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    className="flex items-center gap-2"
+                    sx={{ fontSize: '1rem' }}
+                  >
+                    You have no pending tasks
+                  </Typography>
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         <Dialog
