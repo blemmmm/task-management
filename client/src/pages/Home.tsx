@@ -82,8 +82,8 @@ const HomePage = () => {
 
   return (
     <div className="flex items-center justify-center w-full">
-      <div className="border border-solid border-neutral-200 h-auto rounded-lg my-4 w-[40vw]">
-        <div className="py-3 flex items-center justify-between border-0 border-b border-solid border-neutral-200 font-sans px-8">
+      <div className="border border-solid border-neutral-200 h-auto rounded-lg my-4 w-full lg:w-[40vw]">
+        <div className="py-3 flex items-center justify-between border-0 border-b border-solid border-neutral-200 font-sans px-4 lg:px-8">
           <span className="text-lg font-semibold">Tasks</span>
           <Button
             className="!bg-neutral-100 !px-4 !py-2 !gap-1.5"
