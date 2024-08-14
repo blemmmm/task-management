@@ -2,6 +2,7 @@ export interface TaskPayload {
   name: string;
   description: string;
   status: 'in_progress' | 'completed' | 'pending';
+  id?: string;
 }
 
 export interface Task {

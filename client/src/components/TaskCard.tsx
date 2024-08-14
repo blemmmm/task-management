@@ -1,31 +1,81 @@
-import { CalendarToday, Person, Tag } from '@mui/icons-material';
+import { Task } from '@/lib/interface/TaskTypes';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { Button, Card, CardContent, Chip, Typography } from '@mui/material';
 
-const TaskCard = () => {
+interface TaskCardProps {
+  task: Task;
+  handleEditValues: (task: Task) => void;
+  handleDeleteTask: (id: string) => void;
+}
+
+const TaskCard = ({
+  task,
+  handleEditValues,
+  handleDeleteTask,
+}: TaskCardProps) => {
+  const { name, description } = task;
   return (
-    <div className="p-4  font-sans">
-      <div className="bg-neutral-50 rounded-lg p-4">
+    <Card variant="outlined" className="!border-none !bg-neutral-50">
+      <CardContent>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-neutral-950 rounded-full w-2 h-2" />
-            <h4 className="text-sm font-medium my-1">Design new website</h4>
+          <div className="flex flex-col items-start justify-center">
+            <Typography
+              variant="h6"
+              component="div"
+              className="flex items-center gap-2"
+              sx={{ fontSize: '1rem' }}
+            >
+              {name}
+            </Typography>
+            <Typography
+              variant="caption"
+              component={'p'}
+              sx={{ fontSize: '0.75rem', color: 'text.secondary' }}
+            >
+              {description}
+            </Typography>
+            <Chip
+              label={
+                task.status
+                  ? task.status.replace('_', ' ').toUpperCase()
+                  : 'PENDING'
+              }
+              size="small"
+              sx={{
+                fontWeight: 500,
+                fontSize: '0.7rem',
+                padding: '0.25rem 0.2rem',
+                marginTop: '0.5rem',
+              }}
+              variant="filled"
+              color={
+                task.status === 'completed'
+                  ? 'success'
+                  : task.status === 'in_progress'
+                    ? 'info'
+                    : 'default'
+              }
+            />
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <CalendarToday className="w-4 h-4" />
-            <span>Due: May 15</span>
+          <div className="flex items-center justify-end gap-1">
+            <Button
+              variant="text"
+              sx={{ color: 'text.secondary', padding: 2 }}
+              onClick={() => handleEditValues(task)}
+            >
+              <EditOutlined />
+            </Button>
+            <Button
+              variant="text"
+              sx={{ color: 'text.secondary', padding: 2 }}
+              onClick={() => handleDeleteTask(task.id)}
+            >
+              <DeleteOutline />
+            </Button>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-2">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Person className="w-4 h-4" />
-            <span>Assigned to: John Doe</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Tag className="w-4 h-4" />
-            <span>Design</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

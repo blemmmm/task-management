@@ -21,4 +21,4 @@ INSERT INTO public.tasks ("name", "description", "status", "created_at")
 VALUES ('Build a house', 'I want to build a house.', 'in_progress', now());
 
 INSERT INTO public.tasks ("name", "description", "status", "created_at")
-VALUES ('Write a book', 'I want to write a book.', 'planned', now());
+VALUES ('Write a book', 'I want to write a book.', 'pending', now());

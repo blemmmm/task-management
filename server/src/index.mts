@@ -19,7 +19,11 @@ fastify.get("/", () => {
 });
 
 fastify.get("/api/tasks", async () => {
-  const tasks = await pgdb.selectFrom("tasks").selectAll().execute();
+  const tasks = await pgdb
+    .selectFrom("tasks")
+    .selectAll()
+    .orderBy("created_at", "desc")
+    .execute();
   return tasks;
 });
 
@@ -32,6 +36,45 @@ fastify.post("/api/tasks", async (request) => {
 
   return task;
 });
+
+fastify.put<{ Params: { id: string } }>(
+  "/api/tasks/:id",
+  {
+    schema: {
+      params: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+        },
+      },
+    },
+  },
+  async (request) => {
+    const { id } = request.params;
+    const task = await pgdb
+      .updateTable("tasks")
+      .set(request.body as Task)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    return task;
+  },
+);
+
+fastify.delete<{ Params: { id: string } }>(
+  "/api/tasks/:id",
+  async (request) => {
+    const { id } = request.params;
+    const task = await pgdb
+      .deleteFrom("tasks")
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    return task;
+  },
+);
 
 try {
   await fastify.listen({ port: 8080 });

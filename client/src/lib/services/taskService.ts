@@ -32,8 +32,32 @@ export const useTaskService = () => {
     return data;
   };
 
+  const updateTask = async (task: TaskPayload) => {
+    const response = await fetch(`${config.apiUrl}/api/tasks/${task.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(task),
+    });
+    const data = await response.json();
+
+    return data;
+  };
+
+  const deleteTask = async (id: string) => {
+    const response = await fetch(`${config.apiUrl}/api/tasks/${id}`, {
+      method: 'DELETE',
+    });
+    const data = await response.json();
+
+    return data;
+  };
+
   return {
     getTasks,
     createTask,
+    updateTask,
+    deleteTask,
   };
 };
