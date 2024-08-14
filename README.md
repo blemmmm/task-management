@@ -25,10 +25,7 @@
 > First Terminal
 
 ```bash ./dev.env.sh
-
-```
-
-```bash ./dev.containers.sh
+  bash ./dev.containers.sh
 
 ```
 
