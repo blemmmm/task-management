@@ -23,7 +23,6 @@
 ## Installation
 
 > First Terminal
-> create .env file
 
 ```bash ./dev.env.sh
    bash ./dev.containers.sh
