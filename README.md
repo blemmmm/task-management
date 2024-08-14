@@ -7,7 +7,7 @@
 - [x] Delete a task
 - [x] View all tasks
 - [x] Search task by name
-- [x] Search task by status
+- [x] Filter task by status
 
 ## Tech Stack
 
