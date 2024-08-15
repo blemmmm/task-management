@@ -13,7 +13,7 @@ const TaskCard = ({
   handleEditValues,
   handleDeleteTask,
 }: TaskCardProps) => {
-  const { name, description } = task;
+  const { name, description, status, id } = task;
   return (
     <Card variant="outlined" className="!border-none !bg-neutral-50">
       <CardContent>
@@ -36,8 +36,8 @@ const TaskCard = ({
             </Typography>
             <Chip
               label={
-                task.status
-                  ? task.status.replace('_', ' ').toUpperCase()
+                status
+                  ? status.replace('_', ' ').toUpperCase()
                   : 'PENDING'
               }
               size="small"
@@ -49,9 +49,9 @@ const TaskCard = ({
               }}
               variant="filled"
               color={
-                task.status === 'completed'
+                status === 'completed'
                   ? 'success'
-                  : task.status === 'in_progress'
+                  : status === 'in_progress'
                     ? 'info'
                     : 'default'
               }
@@ -68,7 +68,7 @@ const TaskCard = ({
             <Button
               variant="text"
               sx={{ color: 'text.secondary', padding: 2 }}
-              onClick={() => handleDeleteTask(task.id)}
+              onClick={() => handleDeleteTask(id)}
             >
               <DeleteOutline />
             </Button>
